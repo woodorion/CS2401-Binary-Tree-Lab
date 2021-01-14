@@ -10,10 +10,9 @@ public class mainTest {
       map.insertCity(20, "town 6");
 
       map.cityDistance("town 4", "town 6");
+      map.searchCityPrint("town 5");
+      map.searchCityPrint("town 66");
 
-        System.out.println("Height is : " + map.mapHeight(map.root) );
-
-
-        map.printEntire(map.root);
+      map.printEntire(map.root);
     }
 }

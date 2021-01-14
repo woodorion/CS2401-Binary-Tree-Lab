@@ -27,7 +27,9 @@ class CityBinaryTree {
     City errorCity = new City(-0, "error");     //holds error message, should not be changed
     //prints all the City's in the particular level.
     //Can be called independently, but mainly used in next method to print all nodes in all levels
+    //works as a queue, goes down to appropriate level then prints value after it is loaded
     void printLevel(City current, int level) {
+
         //if the root is null, map is empty. No need to continue, so return after printing nothing.
         if (current == null) {
             return;
@@ -152,7 +154,7 @@ class CityBinaryTree {
         return passerCity;
     }
 
-    //distance
+    //method for various calculations regarding distance
     void cityDistance(String name1, String name2){
 
         //creates two new nodes, uses rewrite method to give them the values of the desired nodes
@@ -208,12 +210,6 @@ class CityBinaryTree {
             System.out.println(temp1.name+ " is the left child of " + temp2.name + " on the map");
         else
             System.out.println("Neither of the nodes are parents of each other");
-    }
-
-    //queue
-     class queuePrint{
-        int distance;
-        String
     }
 
 }
