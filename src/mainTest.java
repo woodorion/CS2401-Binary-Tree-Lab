@@ -2,13 +2,18 @@ public class mainTest {
     public static void main(String[] args) {
         CityBinaryTree map = new CityBinaryTree();
 
-        map.root = new City(1);
-        //map.root.left = new City(2);
-      //  map.root.right = new City(3);
-        //map.root.left.left = new City(4);
-       // map.root.left.right = new City(5);
+      map.insertCity(0, "town 1");
+      map.insertCity(-7, "town 2");
+      map.insertCity(4, "town 3");
+      map.insertCity(-10,"town 4");
+      map.insertCity(90,"town 5");
+      map.insertCity(20, "town 6");
 
-        map.insertCity("west",7);
-        map.printLevelOrder(map.root);
+      map.cityDistance("town 4", "town 6");
+
+        System.out.println("Height is : " + map.mapHeight(map.root) );
+
+
+        map.printEntire(map.root);
     }
 }

@@ -1,71 +1,219 @@
-class  City{
-    int data;
-    City left;
-    City right;
-    public City(int item){
-        data = item;
-        left = null;
-        right = null;
+import java.lang.Math.*;
+
+class CityBinaryTree {
+    class City {
+        int distance; //distance from root (cannot seem to find way to make unsigned ints in java that doesn't significantly lengthen code)
+        //negative is west, positive is east
+        String name;
+        City left;
+        City right;
+
+        public City(int item, String name) {
+            this.distance = item;
+            this.name = name;
+            this.left = null;
+            this.right = null;
+        }
     }
-}
-class CityBinaryTree{
     City root;
 
-    public CityBinaryTree(){
+    //initial constructor
+    public CityBinaryTree() {
         root = null;
     }
-    void printMapOrder(){
-        int h = height(root);
-        for(int i = 1; i <= h; i++){
-            printLevel(root,i);
-        }
-    }
-    int height(City root){
-        if(root == null){
-            return 0;
-        }
-        int heightLeft = height(root.left);
-        int heightRight = height(root.right);
 
-        if(heightLeft > heightRight){
-            return(heightLeft+1);
-        }
-        return(heightRight+1);
-    }
-    void printLevel(City root, int level){
-        if(root == null){
+
+    City passerCity = new City(-0, "error");    // used to pass a city value outside of a recursive method
+    City errorCity = new City(-0, "error");     //holds error message, should not be changed
+    //prints all the City's in the particular level.
+    //Can be called independently, but mainly used in next method to print all nodes in all levels
+    void printLevel(City current, int level) {
+        //if the root is null, map is empty. No need to continue, so return after printing nothing.
+        if (current == null) {
             return;
         }
-        if(level == 1){
-            System.out.print(root.data + " ");
+        if (level == 1) {
+            System.out.print(current.distance + " ");
         }
-        else if(level > 1){
-            printLevel(root.left, level-1);
-            printLevel(root.right, level-1);
-        }
-    }
-     void printLevelOrder(City root){
-        int h = height(root);
-        for(int i = 1; i <= h; i++){
-            printLevel(root,i);
-            System.out.println();
+        //if the level is higher than one, call method again for left and right halves, and one lower level
+        else if (level > 1) {
+            printLevel(current.left, level - 1);
+            printLevel(current.right, level - 1);
         }
     }
-    void insertCity(String direction, int distance){
-        //method takes east or west, and how far the new city is from the root city
-        //this initial method will insert value if the first node after root is empty. Otherwise, it will call similar recursive method
-        City current = root;
 
-        if(direction.equalsIgnoreCase("west")){
-            if(current.left == null){
-                current.left = new City(distance);
-            }
-            insertCity(direction,distance);
+    //prints the map top to bottom, uses printLevel
+    void printEntire(City current) {
+        int height = mapHeight(current);    //used to limit for loop
+        for (int i = 1; i <= height; i++) {
+            printLevel(current, i);    //print at current level (int i value), starting at City current
+            System.out.println();   // after done with that entire level, start new line to delineate a new level
         }
     }
-    void insertCity(City root, String direction, int distance){
-        //recursive method that acts similar to previous, but also takes in a node so that it can start at a higher level each iteration
+
+    //finds the height of the tree.Mainly used in other methods
+    int mapHeight(City root) {
+        //if the root is empty, the map is empty. Therefore height would be 0
+        if (root == null) {
+            return 0;
+        }
+        //finds the height of the left and right halves of the map
+        int heightLeft = mapHeight(root.left);
+        int heightRight = mapHeight(root.right);
+
+        //if the left half is the higher half, return the height of that
+        //the highest height is the height of the entire map
+        if (heightLeft > heightRight) {
+            return (heightLeft + 1);
+        }
+        //else return the right half height
+        return (heightRight + 1);
+    }
+
+    //initial call for insert function. Essentially just points to recursive function.
+    //cannot call recursive function initially, since a City/Node is needed as well
+    void insertCity(int distance, String name){
+        root = insertCity(root,distance, name);
+    }
+
+    //recursive call to insert function. Does most of the work
+    City insertCity(City current, int distance, String name){
+       //if the current node is null, you can insert the new node here
+        if(current == null){
+            current = new City(distance, name);
+            return current;
+        }
+        //if not empty
+        //if the distance is negative (i.e. west), go towards left of the current node
+        if(distance < current.distance){
+            current.left = insertCity(current.left,distance, name);
+        }
+        //if the distance is positive (i.e. east(, go right of the current node
+        else if(distance > current.distance){
+            current.right = insertCity(current.right,distance,name);
+        }
+        else if(distance == current.distance){
+            System.out.println("\nThe distance you have entered is within the " + current.name + " city limits. Please ensure you put in the correct distance.");
+            System.out.println("Remember that negative values are West of " + root.name + " and positive values are East.");
+        }
+        //allows the method to return the node unedited
+        return current;
+    }
+
+    //can rewrite values on a preexisting node. Used to pass values to placeHolder nodes without tying them together
+    void rewrite(City target, City info){
+        target.distance = info.distance;
+        target.name = info.name;
+        target.left = info.left;
+        target.right = info.right;
+    }
+
+    //initial call to search function. Resets passerCity to standard error messages, and prints either info of city, or that city can't be found
+    void searchCityPrint(String name){
+        rewrite(passerCity, errorCity); //must restore passerCity so that error messages work properly
+        //error message if a city of that name was not found
+        if(passerCity.name.equals("error")) {
+            System.out.println(name + " cannot be found in this map");
+        }
+        //messages if city was successfully found
+        else{
+            System.out.println(name + " is " + Math.abs(passerCity.distance) +  ((passerCity.distance > 0) ?" miles East from " : " miles West from ") + root.name);
+            System.out.println(name + " can be found on level " + (mapHeight(root) - mapHeight(passerCity)) + " of the map");
+        }
+        rewrite(passerCity, errorCity);   //restore passerCity again for safety
+
+    }
+
+    //searches through tree to find city by name. Depth first search (i think). Goes left to right
+    //recursive, and private so it cannot be called accidentally in main method
+    //finds city, then passes the node location to a node outside the method. Otherwise would always returns root
+    private City searchCity(City current, String name){
+        //rewrites dummy node to hold error messages if this is the first iteration
+        if(current == root)
+            rewrite(passerCity, errorCity);
+
+        //if the name in the current node matches the desired name, print confirmation and return node
+        if(current.name.equals(name)){
+
+            //this operation is done so that the values can be easily passed to other methods that require them
+            rewrite(passerCity,current);
+
+            return passerCity; //passes
+        }
+        //searches through left and right of method, starting with left
+        else{
+            if(current.left != null){
+                 searchCity(current.left,name);
+            }
+            if(current.right != null){
+                 searchCity(current.right,name);
+            }
+        }
+        return passerCity;
+    }
+
+    //distance
+    void cityDistance(String name1, String name2){
+
+        //creates two new nodes, uses rewrite method to give them the values of the desired nodes
+        City temp1 = new City(0, " ");
+        rewrite(temp1,searchCity(root,name1));
+        City temp2 = new City(0, " ");
+        rewrite(temp2,searchCity(root,name2));
+
+        //error messages if one or more of the cities can be found
+        if(temp1.name.equals("error") && temp2.name.equals("error")){
+            System.out.println("Neither " + name1 + " nor " + name2 + " can be found on this map");
+            return;
+        }
+        else if(temp1.name.equals("error")){
+            System.out.println(name1 + " cannot be found on this map");
+            return;
+        }
+        else if(temp2.name.equals("error")){
+            System.out.println(name2 + " cannot be found on this map");
+            return;
+        }
+
+        //reports to user if each node is left or right of the root
+        if(temp1.distance > 0){
+            if(temp2.distance > 0)
+                System.out.println("Both cities are east of " + root.name);
+            else
+                System.out.println(temp1.name + " is east of " + root.name + ", and " + temp2.name + " is west");
+        }
+        else if(temp1.distance < 0){
+            if(temp2.distance < 0)
+                System.out.println("Both cities are west of " + root.name);
+            else
+                System.out.println(temp2.name + " is east of " + root.name + ", and " + temp1.name + " is west");
+        }
+
+
+        //calculates total distance between two nodes, using their distance from the root, then informs user
+        int totalDistance = Math.abs(temp1.distance - temp2.distance);
+        System.out.println("Total distance between " + temp1.name + " and " + temp2.name + " is " + totalDistance + " miles");
+
+        //is one left of node, one right of node
+
+        //checks if either node is the parent of the other
+        //not null checks are needed to avoid errors
+        if(temp1.right != null && temp1.right.name.equals(temp2.name))
+            System.out.println(temp2.name + " is the right child of " + temp1.name + " on the map");
+        else if(temp1.left != null && temp1.left.name.equals(temp2.name))
+            System.out.println(temp2.name + " is the left child of " + temp1.name + " on the map");
+        else if(temp2.right != null && temp2.right.name.equals(temp1.name))
+            System.out.println(temp1.name + " is the right child of " + temp2.name + " on the map");
+        else if(temp2.left != null && temp2.left.name.equals(temp1.name))
+            System.out.println(temp1.name+ " is the left child of " + temp2.name + " on the map");
+        else
+            System.out.println("Neither of the nodes are parents of each other");
+    }
+
+    //queue
+     class queuePrint{
+        int distance;
+        String
     }
 
 }
-
