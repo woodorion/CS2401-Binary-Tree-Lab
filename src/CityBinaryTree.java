@@ -14,6 +14,17 @@ class CityBinaryTree {
             this.left = null;
             this.right = null;
         }
+
+        public void print() { print(""); }
+        private void print(String prefix) {
+          System.out.println(prefix + name + " (" + distance + ")");
+          prefix = prefix.replace('\u251C', '\u2502');
+          prefix = prefix.replace('\u2514', ' ');
+          if(left != null) left.print(prefix + "\u251C ");
+          else if(right != null) System.out.println(prefix + "\u251C null");
+          if(right != null) right.print(prefix + "\u2514 ");
+          else if(left != null) System.out.println(prefix + "\u2514 null");
+        }
     }
     City root;
 
@@ -29,6 +40,8 @@ class CityBinaryTree {
     //Can be called independently, but mainly used in next method to print all nodes in all levels
     //works as a queue, goes down to appropriate level then prints value after it is loaded
     void printLevel(City current, int level) {
+        /* this is really a static method, since it takes in the node being worked on */
+
 
         //if the root is null, map is empty. No need to continue, so return after printing nothing.
         if (current == null) {
@@ -46,6 +59,10 @@ class CityBinaryTree {
 
     //prints the map top to bottom, uses printLevel
     void printEntire(City current) {
+         /* this is really a static method, since it takes in the node being worked on 
+         * ideally it woudn't take in a parameter and would just use the root since it then calls something
+         * on each level. 
+         */
         int height = mapHeight(current);    //used to limit for loop
         for (int i = 1; i <= height; i++) {
             printLevel(current, i);    //print at current level (int i value), starting at City current
@@ -55,6 +72,12 @@ class CityBinaryTree {
 
     //finds the height of the tree.Mainly used in other methods
     int mapHeight(City root) {
+        /* this is really a static method, since it takes in the node being worked on 
+         * it would be good to do this like you did insert where you don't include the node in one call
+         * then the recursive calls need it
+         * but those can be private
+         */
+
         //if the root is empty, the map is empty. Therefore height would be 0
         if (root == null) {
             return 0;
@@ -211,5 +234,7 @@ class CityBinaryTree {
         else
             System.out.println("Neither of the nodes are parents of each other");
     }
+
+
 
 }
