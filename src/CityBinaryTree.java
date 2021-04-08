@@ -1,4 +1,12 @@
 import java.lang.Math.*;
+/*
+Orion's Notes:
+-Change how values are stored. Distance of a node should represent the distance and direction from it's parent, not of root.
+--Accomplish this by, at every step, subtracting the distance already traveled (i.e. distance stored at the current node), then moving on.
+--When reporting distance between two points, do necessesary addition/subtraction at each step.
+-remove faulty queue/stack function (point for future, develop skills in implementing stack/queues without using Java's code)
+- look at methods: printEntire, mapHeight if time allows
+ */
 
 class CityBinaryTree {
     class City {
@@ -38,10 +46,7 @@ class CityBinaryTree {
     City errorCity = new City(-0, "error");     //holds error message, should not be changed
     //prints all the City's in the particular level.
     //Can be called independently, but mainly used in next method to print all nodes in all levels
-    //works as a queue, goes down to appropriate level then prints value after it is loaded
-    void printLevel(City current, int level) {
-        /* this is really a static method, since it takes in the node being worked on */
-
+    static void printLevel(City current, int level) {
 
         //if the root is null, map is empty. No need to continue, so return after printing nothing.
         if (current == null) {
@@ -58,11 +63,11 @@ class CityBinaryTree {
     }
 
     //prints the map top to bottom, uses printLevel
-    void printEntire(City current) {
-         /* this is really a static method, since it takes in the node being worked on 
+    static void printEntire(City current) {
+         /* this is really a static method, since it takes in the node being worked on
          * ideally it woudn't take in a parameter and would just use the root since it then calls something
          * on each level. 
-         */
+         */ //Note on above; fixed methods to be static. Not sure how to fix second issue without redoing a lot of code. Will have to look into it later - Orion
         int height = mapHeight(current);    //used to limit for loop
         for (int i = 1; i <= height; i++) {
             printLevel(current, i);    //print at current level (int i value), starting at City current
@@ -71,7 +76,7 @@ class CityBinaryTree {
     }
 
     //finds the height of the tree.Mainly used in other methods
-    int mapHeight(City root) {
+    static int mapHeight(City root) {
         /* this is really a static method, since it takes in the node being worked on 
          * it would be good to do this like you did insert where you don't include the node in one call
          * then the recursive calls need it

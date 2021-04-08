@@ -9,9 +9,9 @@ public class mainTest {
       map.insertCity(90,"town 5");
       map.insertCity(20, "town 6");
 
-      map.cityDistance("town 4", "town 6");
-      map.searchCityPrint("town 5");
-      map.searchCityPrint("town 66");
+     // map.cityDistance("town 4", "town 6");
+     // map.searchCityPrint("town 5");
+      //map.searchCityPrint("town 66");
 
       map.printEntire(map.root);
     }
