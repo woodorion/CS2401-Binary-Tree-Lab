@@ -2,15 +2,15 @@ import java.lang.Math.*;
 /*
 Orion's Notes:
 -Change how values are stored. Distance of a node should represent the distance and direction from it's parent, not of root.
---Accomplish this by, at every step, subtracting the distance already traveled (i.e. distance stored at the current node), then moving on.
+--Seem to have fixed the issue, except that east is negative, instead of west.
+--This has broken the search function, must be fixed
 --When reporting distance between two points, do necessesary addition/subtraction at each step.
--remove faulty queue/stack function (point for future, develop skills in implementing stack/queues without using Java's code)
 - look at methods: printEntire, mapHeight if time allows
  */
 
 class CityBinaryTree {
     class City {
-        int distance; //distance from root (cannot seem to find way to make unsigned ints in java that doesn't significantly lengthen code)
+        int distance; //distance from parent node
         //negative is west, positive is east
         String name;
         City left;
@@ -107,6 +107,7 @@ class CityBinaryTree {
     }
 
     //recursive call to insert function. Does most of the work
+    //
     City insertCity(City current, int distance, String name){
        //if the current node is null, you can insert the new node here
         if(current == null){
@@ -115,12 +116,12 @@ class CityBinaryTree {
         }
         //if not empty
         //if the distance is negative (i.e. west), go towards left of the current node
-        if(distance < current.distance){
-            current.left = insertCity(current.left,distance, name);
+        if(distance < current.distance && distance != 0){
+            current.left = insertCity(current.left,distance-current.distance, name);
         }
         //if the distance is positive (i.e. east(, go right of the current node
         else if(distance > current.distance){
-            current.right = insertCity(current.right,distance,name);
+            current.right = insertCity(current.right,distance-current.distance,name);
         }
         else if(distance == current.distance){
             System.out.println("\nThe distance you have entered is within the " + current.name + " city limits. Please ensure you put in the correct distance.");
