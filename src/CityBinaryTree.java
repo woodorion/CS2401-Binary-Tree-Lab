@@ -190,7 +190,7 @@ class CityBinaryTree {
         return passerCity;
     }
 
-    //method for various calculations regarding distance
+    //initial call to find total distance, the private recursive version does the work
     void cityDistance(String name1, String name2){
 
         //creates two new nodes, uses rewrite method to give them the values of the desired nodes
@@ -248,31 +248,33 @@ class CityBinaryTree {
             System.out.println("Neither of the nodes are parents of each other");
     }
     public int totalDistance(String name){
-        int distance = 0;
-        return totalDistance(root,name,distance);
+        return totalDistance(root,name);
     }
-    private int totalDistance(City current, String name, int distance){
-        System.out.println("Start at " +current.name);
-        totalDistance += current.distance;
+    //used to find total distance of a city from the root
+    private int totalDistance(City current, String name){
+        totalDistance += current.distance;//adds the current distance to the total
+
+        //if the node is found, return the total distance and set found to true
         if(current.name.equals(name)){
-            System.out.println("Found city" + current.distance);
             found = true;
             return totalDistance;
         }
         else{
-            System.out.println("Didn't find" + current.distance);
+            //if the left node is not null, AND the node hasn't been found yet
+            //search left of the current node
             if(current.left != null && !found){
-                System.out.println("Going left");
-                totalDistance(current.left, name, distance);
+                totalDistance(current.left, name);
             }
+            //same as above, but to the right
             if(current.right != null && !found){
-                System.out.println("Going right" + current.distance);
-                totalDistance(current.right, name, distance);
+                totalDistance(current.right, name);
             }
         }
-        System.out.println("Ending function");
+        //if the city was not found, subtract the current distance from the total
+        //this is done so that only the values that are on the path to the desired city are added up
         if(!found)
             totalDistance -= current.distance;
+        //return the total distance
         return totalDistance;
     }
 
