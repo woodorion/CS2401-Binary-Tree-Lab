@@ -1,17 +1,14 @@
-import java.lang.Math.*;
 /*
 Orion's Notes:
--Change how values are stored. Distance of a node should represent the distance and direction from it's parent, not of root.
---Seem to have fixed the issue
---forgot that search function is private, still seems to work based off of cityDistance behavior
---cityDistance correctly finds cities, but incorrectly reports the stored distance as the total distance from the root
----When reporting distance between two points, do necessesary addition/subtraction at each step.
-- look at methods: printEntire, mapHeight if time allows
+-Changed how distance is stored. Now correctly changes each value to represent distance from the parent node.
+-Distance comparator works with new system
+-negative values represent west
+- look at methods: printEntire, mapHeight if time allows (to self)
  */
 
 class CityBinaryTree {
-    int totalDistance;
-    boolean found = false;
+    int totalDistance; // stores distance from root
+    boolean found = false; //stores if the node has been found yet
     class City {
         int distance; //distance from parent node
         //negative is west, positive is east
@@ -199,6 +196,10 @@ class CityBinaryTree {
         City temp2 = new City(0, " ");
         rewrite(temp2,searchCity(root,name2));
 
+        //changes distance of each temp node to be equal to it's distance from the root
+        temp1.distance = totalDistance(temp1.name);
+        temp2.distance = totalDistance(temp2.name);
+
         //error messages if one or more of the cities can be found
         if(temp1.name.equals("error") && temp2.name.equals("error")){
             System.out.println("Neither " + name1 + " nor " + name2 + " can be found on this map");
@@ -247,7 +248,10 @@ class CityBinaryTree {
         else
             System.out.println("Neither of the nodes are parents of each other");
     }
+    //initial call to find total distance, resets global variables
     public int totalDistance(String name){
+        totalDistance = 0;
+        found = false;
         return totalDistance(root,name);
     }
     //used to find total distance of a city from the root

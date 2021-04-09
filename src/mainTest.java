@@ -16,7 +16,6 @@ public class mainTest {
         //map.root.print();
        // System.out.println("Should print:\nR (0)\n├ E8 (8)\n│ ├ E12 (4)\n| | ├ null \n| | └ E10 (-2)\n| └ E6 (-2)\n└ W2 (-2)\n  ├ null \n  └ W10 (-8)\n    ├ W5 (3)\n    └ null");
 
-        map.cityDistance("8", "E12");
-        System.out.println("Total distance: " + map.totalDistance("W5"));
+
     }
 }
