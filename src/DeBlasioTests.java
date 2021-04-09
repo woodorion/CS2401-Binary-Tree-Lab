@@ -1,12 +1,12 @@
 class DeBlasioTests{
     public static void main(String[] args){
         CityBinaryTree map1 = new CityBinaryTree();
-        map1.insertCity(0, "R");
-        map1.insertCity(4, "W4");
-        map1.insertCity(6, "W6");
-        map1.insertCity(-6, "E6");
-        map1.insertCity(-4, "E4");
-        map1.insertCity(-8, "E8");
+        map1.insertCity(-0, "R");
+        map1.insertCity(-4, "W4");
+        map1.insertCity(-6, "W6");
+        map1.insertCity(6, "E6");
+        map1.insertCity(4, "E4");
+        map1.insertCity(8, "E8");
 
         map1.root.print();
 

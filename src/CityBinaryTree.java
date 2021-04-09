@@ -23,15 +23,19 @@ class CityBinaryTree {
             this.right = null;
         }
 
+        //Believe this was added by Dr. De Blasio
+        //If I understand correctly, prints the name(distance). then adds characters to more easily read chart.
+        //Also prints the null nodes, if node is not on the bottom
+        //NOTE: left and right were switched before edit, negative = west. Was putting west on the right instead of the left.
         public void print() { print(""); }
         private void print(String prefix) {
           System.out.println(prefix + name + " (" + distance + ")");
           prefix = prefix.replace('\u251C', '\u2502');
           prefix = prefix.replace('\u2514', ' ');
-          if(left != null) left.print(prefix + "\u251C ");
-          else if(right != null) System.out.println(prefix + "\u251C null");
-          if(right != null) right.print(prefix + "\u2514 ");
-          else if(left != null) System.out.println(prefix + "\u2514 null");
+          if(right != null) right.print(prefix + "\u251C ");
+          else if(left != null) System.out.println(prefix + "\u251C null");
+          if(left != null) left.print(prefix + "\u2514 ");
+          else if(right != null) System.out.println(prefix + "\u2514 null");
         }
     }
     City root;
@@ -116,7 +120,7 @@ class CityBinaryTree {
         }
         //if not empty
         //if the distance is negative (i.e. west), go towards left of the current node
-        if(distance < current.distance && distance != 0){
+        if(distance < current.distance){
             current.left = insertCity(current.left,distance-current.distance, name);
         }
         //if the distance is positive (i.e. east(, go right of the current node

@@ -1,18 +1,20 @@
+//prefer the test that Dr. De Blasio implemented, adding to my own tests
 public class mainTest {
     public static void main(String[] args) {
         CityBinaryTree map = new CityBinaryTree();
 
-      map.insertCity(0, "town 1");
-      map.insertCity(-7, "town 2");
-      map.insertCity(4, "town 3");
-      map.insertCity(-10,"town 4");
-      map.insertCity(90,"town 5");
-      map.insertCity(20, "town 6");
+        map.insertCity(0, "R");
+        map.insertCity(8, "E8");
+        map.insertCity(6, "E6");
+        map.insertCity(12,"E12");
+        map.insertCity(10,"E10");
+        map.insertCity(-2, "W2");
+        map.insertCity(-10,"W10");
+        map.insertCity(-5,"W5");
 
-     // map.cityDistance("town 4", "town 6");
-     // map.searchCityPrint("town 5");
-      //map.searchCityPrint("town 66");
+        map.root.print();
 
-      map.printEntire(map.root);
+        System.out.println("Should print:\nR (0)\n├ E8 (8)\n│ ├ E12 (4)\n| | ├ null \n| | └ E10 (-2)\n| └ E6 (-2)\n└ W2 (-2)\n  ├ null \n  └ W10 (-8)\n    ├ W5 (3)\n    └ null");
+
     }
 }
