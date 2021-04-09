@@ -2,13 +2,16 @@ import java.lang.Math.*;
 /*
 Orion's Notes:
 -Change how values are stored. Distance of a node should represent the distance and direction from it's parent, not of root.
---Seem to have fixed the issue, except that east is negative, instead of west.
---This has broken the search function, must be fixed
---When reporting distance between two points, do necessesary addition/subtraction at each step.
+--Seem to have fixed the issue
+--forgot that search function is private, still seems to work based off of cityDistance behavior
+--cityDistance correctly finds cities, but incorrectly reports the stored distance as the total distance from the root
+---When reporting distance between two points, do necessesary addition/subtraction at each step.
 - look at methods: printEntire, mapHeight if time allows
  */
 
 class CityBinaryTree {
+    int totalDistance;
+    boolean found = false;
     class City {
         int distance; //distance from parent node
         //negative is west, positive is east
@@ -243,6 +246,34 @@ class CityBinaryTree {
             System.out.println(temp1.name+ " is the left child of " + temp2.name + " on the map");
         else
             System.out.println("Neither of the nodes are parents of each other");
+    }
+    public int totalDistance(String name){
+        int distance = 0;
+        return totalDistance(root,name,distance);
+    }
+    private int totalDistance(City current, String name, int distance){
+        System.out.println("Start at " +current.name);
+        totalDistance += current.distance;
+        if(current.name.equals(name)){
+            System.out.println("Found city" + current.distance);
+            found = true;
+            return totalDistance;
+        }
+        else{
+            System.out.println("Didn't find" + current.distance);
+            if(current.left != null && !found){
+                System.out.println("Going left");
+                totalDistance(current.left, name, distance);
+            }
+            if(current.right != null && !found){
+                System.out.println("Going right" + current.distance);
+                totalDistance(current.right, name, distance);
+            }
+        }
+        System.out.println("Ending function");
+        if(!found)
+            totalDistance -= current.distance;
+        return totalDistance;
     }
 
 

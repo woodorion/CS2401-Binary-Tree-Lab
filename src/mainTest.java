@@ -12,9 +12,11 @@ public class mainTest {
         map.insertCity(-10,"W10");
         map.insertCity(-5,"W5");
 
-        map.root.print();
+        //code to set insert function. Seems fully operational
+        //map.root.print();
+       // System.out.println("Should print:\nR (0)\n├ E8 (8)\n│ ├ E12 (4)\n| | ├ null \n| | └ E10 (-2)\n| └ E6 (-2)\n└ W2 (-2)\n  ├ null \n  └ W10 (-8)\n    ├ W5 (3)\n    └ null");
 
-        System.out.println("Should print:\nR (0)\n├ E8 (8)\n│ ├ E12 (4)\n| | ├ null \n| | └ E10 (-2)\n| └ E6 (-2)\n└ W2 (-2)\n  ├ null \n  └ W10 (-8)\n    ├ W5 (3)\n    └ null");
-
+        map.cityDistance("R", "E12");
+        System.out.println("Total distance: " + map.totalDistance("W5"));
     }
 }
